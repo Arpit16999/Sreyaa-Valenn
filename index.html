@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Valentine, Sreya?</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #ff4d6d;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .gif-placeholder {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 20px;
+      background: #ffe3ec;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #ff4d6d;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      transform: scale(1);
+    }
+
+    #noBtn {
+      background: #ddd;
+      position: relative;
+    }
+
+    .celebration {
+      display: none;
+      font-size: 22px;
+      color: #ff4d6d;
+      margin-top: 20px;
+    }
+
+    /* Fullscreen video overlay */
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .video-box {
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 90vw;
+      max-height: 80vh;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .close-btn {
+      margin-top: 15px;
+      background: #ff4d6d;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="gif-placeholder">Put cute pixel GIF here 💖</div>
+
+    <h1>SREYAYASYYAY…</h1>
+    <p>
+      I have an extremely serious, life‑changing, universe‑altering question.
+      <br /><br />
+      Will you be my Valentine? 🥺
+    </p>
+
+    <div class="buttons">
+      <button id="yesBtn">YES 😎</button>
+      <button id="noBtn">No 🙄</button>
+    </div>
+
+    <div class="celebration" id="celebration">
+      YAAAAAYYYY 💃🕺<br />
+      You just made me the happiest human alive.
+    </div>
+  </div>
+
+  <!-- Hidden video surprise -->
+  <div class="video-overlay" id="videoOverlay">
+    <div class="video-box">
+      <!-- Replace src with your exported PPT video file -->
+      <video id="surpriseVideo" src="your-video.mp4" controls></video>
+    </div>
+    <button class="close-btn" onclick="closeVideo()">ok wow that was cute 😳</button>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const celebration = document.getElementById("celebration");
+    const videoOverlay = document.getElementById("videoOverlay");
+    const video = document.getElementById("surpriseVideo");
+
+    let noScale = 1;
+
+    // NO button flies away AND YES grows bigger
+    function moveNoButton() {
+      const x = Math.random() * (window.innerWidth - 120);
+      const y = Math.random() * (window.innerHeight - 60);
+
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      noScale -= 0.1;
+      if (noScale > 0.3) {
+        noBtn.style.transform = `scale(${noScale})`;
+      }
+
+      const yesScale = 1 + (1 - noScale);
+      yesBtn.style.transform = `scale(${yesScale})`;
+    }
+
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+
+    // YES celebration
+    yesBtn.addEventListener("click", () => {
+      celebration.style.display = "block";
+
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement("div");
+        heart.textContent = "💖";
+        heart.style.position = "fixed";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "-20px";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        heart.style.animation = "fall 3s linear forwards";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 3000);
+      }
+    });
+
+    // After 12 seconds → show surprise video
+    setTimeout(() => {
+      videoOverlay.style.display = "flex";
+      video.play().catch(() => {});
+    }, 12000);
+
+    function closeVideo() {
+      videoOverlay.style.display = "none";
+      video.pause();
+    }
+
+    // Falling animation
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
